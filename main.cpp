@@ -1,3 +1,10 @@
+/**
+ *	Main function:
+ *	1) Start the process of factorization
+ *	2) Waiting for user input and transmit control signals 
+ */
+
+
 #include <iostream>
 #include <mutex>
 #include <chrono>
@@ -17,7 +24,7 @@ int main(int argc, char** argv) {
 	if (factorizator.isCorrect()) {
 		cout << "The factorizator is successfully initialized" << endl;
 	} else {
-		cout << "Failed to initialize the factorizator" << endl;
+		cout << "Error while attempting to initialize the factorizator" << endl;
 		return 0;
 	}
 	factorizator.start();
@@ -38,7 +45,6 @@ int main(int argc, char** argv) {
 	}
 	factorizator.join();
 	cout << "The program is ended" << endl;
-
 
 	system("pause");
 	return 0;
