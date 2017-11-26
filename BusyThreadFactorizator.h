@@ -72,7 +72,10 @@ public:
 		output.clear();
 	}
 
-	void resume() {	
+	void resume() {
+		if (output.fail()) {
+			throw std::runtime_error("Can't reopen file, because of failbit\n");
+		}
 		output.open(outputFileName.c_str(), std::ios_base::app);
 		suspended = false;
 		suspend_cond.notify_all();
@@ -93,15 +96,23 @@ public:
 		return BusyThread::isDone();
 	}
 
-private:	 
+private:	
+	// streams
+	std::ifstream input;
+	std::ofstream output;
+	
+	// files
+	std::string inputFilename;
+	std::string outputFileName;
+	
+	// synchronization	
 	std::atomic_bool suspended = false;
 	std::condition_variable suspend_cond;
 	std::mutex write_mutex;
-	std::string inputFilename;
-	std::string outputFileName;
+	
+	// Thread pool
 	ThreadPool pool;
-	std::ifstream input;
-	std::ofstream output;
+	
 	State state;
 };
 
