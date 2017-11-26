@@ -62,6 +62,10 @@ bool Factorizator::isCorrectFactorization() const {
     return res == number;
 }
 
+/**
+ * Use Pollard factorization algorithm while
+ * the number greater than INT_MAX
+ */
 void Factorizator::factorization() {
     uint64_t temp = number;
     while (temp > INT_MAX) {
@@ -71,6 +75,10 @@ void Factorizator::factorization() {
     optimization();
 }
 
+/**
+ * Just a O(sqrt(num)) algorithm
+ * Return true if num is even, false overwise
+ */
 bool Factorizator::naiveFactorization(uint64_t num) {
     auto temp = static_cast<int>(num);
     for (uint32_t i = 2; i * i <= temp; ++i) {
@@ -82,14 +90,10 @@ bool Factorizator::naiveFactorization(uint64_t num) {
             }
         }
     }
-    if (num == 0) {
-        factors.emplace_back(std::make_pair(1, 0));
-        return false;
-    }
-    if (num > 1) {
+    if (num == 0 || num > 1) {
         factors.emplace_back(std::make_pair(1, num));
         return false;
-    }
+    }    
     return true;
 }
 
@@ -103,6 +107,10 @@ uint64_t Factorizator::gcd(uint64_t a, uint64_t b) {
     return a;
 }
 
+/*
+ * Finds one divisor, but it may not be a prime number
+ * So, we need the optimization() function
+ */
 void Factorizator::pollardFactorization(uint64_t& num) {
     std::uniform_int_distribution<> uni(0, INT_MAX);
     std::random_device rd;
@@ -125,6 +133,10 @@ void Factorizator::pollardFactorization(uint64_t& num) {
             factors.emplace_back(std::make_pair(1, factor));
         }
     } else {
+	    // I store divisors in uint32_t variables, which capacity are [0; 2^32 -1]
+	    // But the number may not be a prime and be greate than uint32_t capacity
+	    // Thus, I use some crutch to deal with it))
+	    // The program interprets this pair as the input number itself
         factors.emplace_back(std::make_pair(0, 1));
     }
     num /= factor;
@@ -133,6 +145,7 @@ void Factorizator::pollardFactorization(uint64_t& num) {
 void Factorizator::optimization() {
     int i = 0;
     size_t vectorSize = factors.size();
+	// Checks if there are not prime numbers in the factors list
     while (naiveFactorization(static_cast<uint64_t>(factors[i].second)) && i < factors.size()) {
         for (size_t j = factors.size() - 1; j > vectorSize; --j) {
             factors[j].first *= factors[i].first;
@@ -146,6 +159,7 @@ void Factorizator::optimization() {
 		const std::pair<short, uint32_t>& b) {
         return a.second < b.second;
     });
+	// Union all of identical divisors
     auto it = factors.begin();
     while (it != factors.end() - 1)
         if (it->second == (it + 1)->second) {
