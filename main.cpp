@@ -40,7 +40,15 @@ int main(int argc, char** argv) {
 			factorizator.suspend();
 		}
 		else if (cmd.compare("resume") == 0 || cmd.compare("continue") == 0) {
-			factorizator.resume();
+			try {
+				factorizator.resume();
+			} catch (std::runtime_error& err) {
+				cout << err.what();
+				factorizator.abort();
+				cout << "Terminate process" << endl;
+				factorizator.join();
+				return 1;
+			}
 		}
 	}
 	factorizator.join();
