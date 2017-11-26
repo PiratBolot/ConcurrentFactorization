@@ -18,7 +18,7 @@ public:
 
     const std::string toString() const;
 
-	const std::string toReducedString() const;
+    const std::string toReducedString() const;
 
     bool isCorrectFactorization() const;
 
