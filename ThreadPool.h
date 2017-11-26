@@ -2,7 +2,7 @@
  *
  * The thread pool class.
  * You can start any callable objects: functors, global and static function, and class methods
- *
+ * Update: also you can suspend, resume and abort running tasks
  */
 
 #ifndef THREAD_POOL_H
