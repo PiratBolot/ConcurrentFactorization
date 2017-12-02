@@ -67,8 +67,8 @@ private:
 
 inline ThreadPool::ThreadPool(size_t threadNumber) {
 
-	// if the number of threads that system can handle concurrently more than {threadsNumber}, this value will be set
-	if (threadNumber < std::thread::hardware_concurrency()) {
+	// if the number of threads that system can handle concurrently less than {threadNumber}, this value will be set
+	if (threadNumber > std::thread::hardware_concurrency()) {
 		this->threadsNumber = std::thread::hardware_concurrency();
 	} else {
 		this->threadsNumber = threadNumber;
