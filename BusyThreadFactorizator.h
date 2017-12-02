@@ -51,8 +51,7 @@ public:
 				suspend_cond.wait(lock, [this]() -> bool {
 					return !suspended;
 				});
-				output << f.toString() << std::endl;
-				//std::cout << output.fail() << std::endl;
+				output << f.toString() << "\n";
 			});
 		}
 		pool.joinAll();
